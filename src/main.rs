@@ -1,5 +1,6 @@
 #![feature(default_free_fn)]
 
+use cell::vec_gen;
 use log::error;
 use pixels::Error;
 use pixels::Pixels;
@@ -15,8 +16,8 @@ use winit_input_helper::WinitInputHelper;
 mod cell;
 mod grid;
 
-const WIDTH: u32 = 200;
-const HEIGHT: u32 = 75;
+const WIDTH: u32 = 500;
+const HEIGHT: u32 = 400;
 
 fn main() -> Result<(), Error> {
     let event_loop = EventLoop::new();
@@ -40,29 +41,9 @@ fn main() -> Result<(), Error> {
 
     let mut input = WinitInputHelper::new();
 
-    let mut cells_vec: Vec<cell::Cell> = vec![];
     
-    let mut rng: randomize::PCG32 = generate_seed().into();
 
-    let mut i: i128 = 0;
-
-    let mut a: i128 = 0;
-
-    for _ in 0..(WIDTH * HEIGHT) {
-        if randomize::f32_half_open_right(rng.next_u32()) > 0.9 {
-            cells_vec.push(cell::Cell { alive: true });
-            i = i + 1;
-        } else {
-            cells_vec.push(cell::Cell { alive: false });
-            a = a + 1;
-        }
-    }
-
-    // print!("{i} {a}");
-
-    /*for _ in 0..=cells_vec.len() {
-        print!("{}", cells_vec[i].alive);
-    }   */
+    let mut cells_vec = cell::vec_gen(HEIGHT*WIDTH);
 
     let woud = WIDTH as usize;
     let bad = HEIGHT as usize;
@@ -78,15 +59,6 @@ fn main() -> Result<(), Error> {
     event_loop.run(move |event, _, control_flow| {
         *control_flow = ControlFlow::Wait;
 
-        if let Event::RedrawRequested(_) = event {
-            the_grid.draw(pixels.get_frame_mut(), &cells_vec);
-            if let Err(err) = pixels.render() {
-                error!("pixels.render() failed: {}", err);
-                *control_flow = ControlFlow::Exit;
-                return;
-            }
-        }
-
         match event {
             Event::WindowEvent {
                 event: WindowEvent::CloseRequested,
@@ -95,14 +67,24 @@ fn main() -> Result<(), Error> {
             _ => (),
         }
 
+        if let Event::RedrawRequested(_) = event {
+            the_grid.draw_random(pixels.get_frame_mut(), &cells_vec);
+            if let Err(err) = pixels.render() {
+                error!("pixels.render() failed: {}", err);
+                *control_flow = ControlFlow::Exit;
+                return;
+            }
+        }
+
         if input.update(&event) {
             if input.key_pressed(winit::event::VirtualKeyCode::Escape) {
                 *control_flow = ControlFlow::Exit;
                 return;
             }
 
-            if input.key_pressed(winit::event::VirtualKeyCode::A) {
-                the_grid.draw(pixels.get_frame_mut(), &cells_vec);
+            if input.key_held(winit::event::VirtualKeyCode::A) {
+                cells_vec = vec_gen(HEIGHT*WIDTH);
+                the_grid.draw_random(pixels.get_frame_mut(), &cells_vec);
                 pixels.render().expect("");
             }
 
@@ -114,16 +96,4 @@ fn main() -> Result<(), Error> {
     });
 }
 
-fn generate_seed() -> (u64, u64) {
-    use byteorder::{ByteOrder, NativeEndian};
-    use getrandom::getrandom;
 
-    let mut seed = [0_u8; 16];
-
-    getrandom(&mut seed).expect("failed to getrandom");
-
-    (
-        NativeEndian::read_u64(&seed[0..8]),
-        NativeEndian::read_u64(&seed[8..16]),
-    )
-}
