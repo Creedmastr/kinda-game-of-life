@@ -15,8 +15,8 @@ use winit_input_helper::WinitInputHelper;
 mod cell;
 mod grid;
 
-const WIDTH: u32 = 400;
-const HEIGHT: u32 = 300;
+const WIDTH: u32 = 200;
+const HEIGHT: u32 = 75;
 
 fn main() -> Result<(), Error> {
     let event_loop = EventLoop::new();
@@ -101,9 +101,15 @@ fn main() -> Result<(), Error> {
                 return;
             }
 
-            /*if input.key_pressed(winit::event::VirtualKeyCode::Space) {
-                Grid.draw(pixels.get_frame_mut());
-            }*/
+            if input.key_pressed(winit::event::VirtualKeyCode::A) {
+                the_grid.draw(pixels.get_frame_mut(), &cells_vec);
+                pixels.render().expect("");
+            }
+
+            if input.key_pressed(winit::event::VirtualKeyCode::Space) {
+                the_grid.update(pixels.get_frame_mut(), &cells_vec);
+                pixels.render().expect("Couldn't render");
+            }
         }
     });
 }
