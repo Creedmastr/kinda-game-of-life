@@ -4,7 +4,7 @@ pub struct Cell {
     pub alive: bool,
 }
 
-/*
+
 impl Cell {
     pub fn is_alive(&self) -> bool {
         self.alive
@@ -21,7 +21,7 @@ impl Cell {
     }
 }
 
-*/
+
 
 pub fn generate_seed() -> (u64, u64) {
     use byteorder::{ByteOrder, NativeEndian};
