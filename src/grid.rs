@@ -39,7 +39,7 @@ impl Grid {
             if b < (px - 10) as usize  && b > 10 {
                 let reference: Cell = Cell {
                     alive: true,
-                    coord_x: b - rule_value,
+                    coord_x: (b - rule_value) as u64,
                     coord_y: vec[b].coord_y
                 };
     
