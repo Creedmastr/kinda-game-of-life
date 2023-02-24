@@ -1,5 +1,5 @@
 
-#[derive(Clone, Copy, Debug, Default)]
+#[derive(Clone, Copy, Debug, Default, PartialEq)]
 pub struct Cell {
     pub alive: bool,
     pub coord_x: u64,
@@ -49,23 +49,25 @@ pub fn vec_gen(px: u32, WIDTH: u32, HEIGHT: u32) -> Vec<Cell> {
     let mut i = 0;
     let mut a = 0;
 
-    while a < 12001 {
-        for _ in 0..WIDTH {
+    while a < HEIGHT {
+        for _ in 1..=WIDTH {
             if randomize::f32_half_open_right(rng.next_u32()) > 0.9 {
                 vec_generated.push(Cell {
                      alive: true,
                      coord_x: i,
-                     coord_y: a
+                     coord_y: a as u64,
                 });
             } else {
                 vec_generated.push(Cell {
                      alive: false,
                      coord_x: i,
-                     coord_y: a 
+                     coord_y: a as u64
                 });
             }
             i += 1;
         }
+
+        i = 0;
 
         a += 1;
     }
