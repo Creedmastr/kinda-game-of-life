@@ -1,5 +1,4 @@
 use crate::cell::Cell;
-use crate::cell;
 
 #[derive(Clone)]
 pub struct Grid {

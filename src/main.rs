@@ -41,9 +41,7 @@ fn main() -> Result<(), Error> {
 
     let mut input = WinitInputHelper::new();
 
-    
-
-    let mut cells_vec = cell::vec_gen(HEIGHT*WIDTH);
+    let mut cells_vec = cell::vec_gen(HEIGHT*WIDTH, WIDTH, HEIGHT);
 
     let woud = WIDTH as usize;
     let bad = HEIGHT as usize;
@@ -83,7 +81,13 @@ fn main() -> Result<(), Error> {
             }
 
             if input.key_held(winit::event::VirtualKeyCode::A) {
-                cells_vec = vec_gen(HEIGHT*WIDTH);
+                cells_vec = vec_gen(HEIGHT*WIDTH, WIDTH, HEIGHT);
+                the_grid.draw_random(pixels.get_frame_mut(), &cells_vec);
+                pixels.render().expect("");
+            }
+
+            if input.key_pressed(winit::event::VirtualKeyCode::B) {
+                cells_vec = vec_gen(HEIGHT*WIDTH, WIDTH, HEIGHT);
                 the_grid.draw_random(pixels.get_frame_mut(), &cells_vec);
                 pixels.render().expect("");
             }
