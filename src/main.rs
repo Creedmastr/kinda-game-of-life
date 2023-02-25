@@ -41,7 +41,7 @@ fn main() -> Result<(), Error> {
 
     let mut input = WinitInputHelper::new();
 
-    let mut cells_vec = cell::vec_gen(HEIGHT * WIDTH, WIDTH, HEIGHT);
+    let mut cells_vec = cell::vec_gen(HEIGHT * WIDTH, WIDTH);
 
     let woud = WIDTH as usize;
     let bad = HEIGHT as usize;
