@@ -81,13 +81,13 @@ fn main() -> Result<(), Error> {
             }
 
             if input.key_held(winit::event::VirtualKeyCode::A) {
-                cells_vec = vec_gen(HEIGHT * WIDTH, WIDTH, HEIGHT);
+                cells_vec = vec_gen(HEIGHT * WIDTH, WIDTH);
                 the_grid.draw_random(pixels.get_frame_mut(), &cells_vec);
                 pixels.render().expect("");
             }
 
             if input.key_pressed(winit::event::VirtualKeyCode::B) {
-                cells_vec = vec_gen(HEIGHT * WIDTH, WIDTH, HEIGHT);
+                cells_vec = vec_gen(HEIGHT * WIDTH, WIDTH);
                 the_grid.draw_random(pixels.get_frame_mut(), &cells_vec);
                 pixels.render().expect("");
             }
